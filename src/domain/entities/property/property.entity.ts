@@ -92,7 +92,7 @@ export class PropertyEntity {
   }
 
   public isAvailable(dateRange: DateRange): boolean {
-    return !this.bookings.some(
+    return !this.getBookings().some(
       (booking) =>
         booking.getStatus() === "CONFIRMED" &&
         booking.getDateRange().overlaps(dateRange),

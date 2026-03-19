@@ -189,13 +189,11 @@ describe("Property Entity", () => {
           new Date("2026-01-15"),
         );
 
-        // booked with dateRange1
-        // now its not available for dateRange2, because it overlaps with dateRange1
         expect(property.isAvailable(dateRange1)).toBe(true);
 
         const booking = new BookingEntity("id", property, user, dateRange1, 2);
-        property.addBooking(booking);
 
+        expect(booking.getProperty().getName()).toBe(property.getName());
         expect(property.isAvailable(dateRange2)).toBe(false);
       });
 
