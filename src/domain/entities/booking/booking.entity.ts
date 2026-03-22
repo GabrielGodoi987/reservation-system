@@ -9,8 +9,8 @@ export class BookingEntity {
   private readonly user: UserEntity;
   private readonly dateRange: DateRange;
   private readonly guestsNumber: number;
-  private readonly status: Bookingstatus = Bookingstatus.CREATED;
-  private readonly totalPrice: number;
+  private status: Bookingstatus = Bookingstatus.CREATED;
+  private totalPrice: number;
 
   constructor(
     id: string,
@@ -22,6 +22,11 @@ export class BookingEntity {
     if (guestsNumber <= 0) {
       throw new Error("guest number must be greater than zero");
     }
+
+    if (!property.isAvailable(dateRange)) {
+      throw new Error("Property is not available for selected date range");
+    }
+
     property.validateGuestCount(guestsNumber);
 
     this.id = id;
@@ -61,5 +66,23 @@ export class BookingEntity {
 
   public getTotalPrice(): number {
     return this.totalPrice;
+  }
+
+  public cancel(currentDate: Date) {
+    if (this.getStatus() == Bookingstatus.CANCELED) {
+      throw new Error("Booking already cancelled");
+    }
+    this.status = Bookingstatus.CANCELED;
+
+    const checkInDate = this.getDateRange().getStartDate();
+    const diffInDays = checkInDate.getTime() - currentDate.getTime();
+
+    const daysUntilCheckIn = Math.ceil(diffInDays / (1000 * 3600 * 24));
+
+    if (daysUntilCheckIn > 7) {
+      this.totalPrice = 0;
+    } else if (daysUntilCheckIn >= 1 && daysUntilCheckIn <= 7) {
+      this.totalPrice *= 0.5;
+    }
   }
 }

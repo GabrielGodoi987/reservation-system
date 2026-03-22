@@ -221,4 +221,40 @@ describe("Property Entity", () => {
       });
     });
   });
+
+  context("Addding bookings to the property", () => {
+    context("success", () => {
+      it("should add bookings to a property", () => {
+        const user1 = new UserEntity("1", "Gabriel Godoi");
+        const property1 = new PropertyEntity(
+          "1",
+          "Monaco penthouse",
+          "A beatiful penthouse in Monaco to enjoy monaco days",
+          300,
+          1,
+          10,
+        );
+
+        const range1 = new DateRange(
+          new Date("2026-06-01"),
+          new Date("2026-06-10"),
+        );
+        const range2 = new DateRange(
+          new Date("2026-06-10"),
+          new Date("2026-06-28"),
+        );
+
+        const booking1 = new BookingEntity("1", property1, user1, range1, 2);
+        const booking2 = new BookingEntity("2", property1, user1, range2, 5);
+
+        expect(property1.getBookings().length).toBe(2);
+        expect(property1.getBookings()[0].getId()).toBe(booking1.getId());
+        expect(property1.getBookings()[1].getId()).toBe(booking2.getId());
+      });
+    });
+
+    context("failure", () => {
+      it("shoudl give an error when try to add two booking with the same date range to the property", () => {});
+    });
+  });
 });
