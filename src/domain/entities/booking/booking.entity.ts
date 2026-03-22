@@ -1,3 +1,4 @@
+import { RefundRuleFactory } from "../../../../src/domain/cancelation/refund-rule.factory";
 import { Bookingstatus } from "../../../../src/domain/enums/booking-status.enum";
 import { DateRange } from "../../../../src/domain/value-objects/date-range/date-range";
 import { PropertyEntity } from "../property/property.entity";
@@ -79,10 +80,8 @@ export class BookingEntity {
 
     const daysUntilCheckIn = Math.ceil(diffInDays / (1000 * 3600 * 24));
 
-    if (daysUntilCheckIn > 7) {
-      this.totalPrice = 0;
-    } else if (daysUntilCheckIn >= 1 && daysUntilCheckIn <= 7) {
-      this.totalPrice *= 0.5;
-    }
+    const refundRule = RefundRuleFactory.getRefundRule(daysUntilCheckIn);
+
+    this.totalPrice = refundRule.calculateRefund(this.totalPrice);
   }
 }
