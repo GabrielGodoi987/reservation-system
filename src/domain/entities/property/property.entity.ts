@@ -1,4 +1,4 @@
-import { DateRange } from "src/domain/value-objects/date-range/date-range";
+import { DateRange } from "../../../../src/domain/value-objects/date-range/date-range";
 import { BookingEntity } from "../booking/booking.entity";
 
 export class PropertyEntity {
