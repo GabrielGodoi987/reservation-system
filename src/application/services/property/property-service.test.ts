@@ -1,7 +1,7 @@
-import { PropertyService } from "../../../src/application/property/property.service";
-import { FakePropertyRepository } from "../../../src/infrastructure/repositories/property/fake-property.repository";
-import { PropertyEntity } from "../../domain/entities/property/property.entity";
-import { context } from "../../lib/context";
+import { PropertyEntity } from "../../../domain/entities/property/property.entity";
+import { FakePropertyRepository } from "../../../infrastructure/repositories/property/fake-property.repository";
+import { context } from "../../../lib/context";
+import { PropertyService } from "./property.service";
 
 describe("PropertyService", () => {
   let propertyRepository: FakePropertyRepository;

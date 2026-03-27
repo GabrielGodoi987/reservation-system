@@ -1,5 +1,5 @@
 import { RefundRuleFactory } from "../../../../src/domain/cancelation/refund-rule.factory";
-import { Bookingstatus } from "../../../../src/domain/enums/booking-status.enum";
+import { BookingStatus } from "../../../../src/domain/enums/booking-status.enum";
 import { DateRange } from "../../../../src/domain/value-objects/date-range/date-range";
 import { PropertyEntity } from "../property/property.entity";
 import { UserEntity } from "../user/user.entity";
@@ -10,7 +10,7 @@ export class BookingEntity {
   private readonly user: UserEntity;
   private readonly dateRange: DateRange;
   private readonly guestsNumber: number;
-  private status: Bookingstatus = Bookingstatus.CREATED;
+  private status: BookingStatus = BookingStatus.CREATED;
   private totalPrice: number;
 
   constructor(
@@ -35,7 +35,7 @@ export class BookingEntity {
     this.user = user;
     this.dateRange = dateRange;
     this.guestsNumber = guestsNumber;
-    this.status = Bookingstatus.CONFIRMED;
+    this.status = BookingStatus.CONFIRMED;
     this.totalPrice = property.calculateTotalPrice(dateRange);
 
     property.addBooking(this);
@@ -61,7 +61,7 @@ export class BookingEntity {
     return this.guestsNumber;
   }
 
-  public getStatus(): Bookingstatus {
+  public getStatus(): BookingStatus {
     return this.status;
   }
 
@@ -70,10 +70,10 @@ export class BookingEntity {
   }
 
   public cancel(currentDate: Date) {
-    if (this.getStatus() == Bookingstatus.CANCELED) {
+    if (this.getStatus() == BookingStatus.CANCELED) {
       throw new Error("Booking already cancelled");
     }
-    this.status = Bookingstatus.CANCELED;
+    this.status = BookingStatus.CANCELED;
 
     const checkInDate = this.getDateRange().getStartDate();
     const diffInDays = checkInDate.getTime() - currentDate.getTime();
