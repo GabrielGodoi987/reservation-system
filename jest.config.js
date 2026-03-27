@@ -3,4 +3,7 @@ module.exports = {
   testEnvironment: "node",
   testMatch: ["**/*.test.ts"],
   moduleFileExtensions: ["ts", "js"],
+  transformIgnorePatterns: [
+    "node_modules/(?!uuid)/"
+  ],
 };

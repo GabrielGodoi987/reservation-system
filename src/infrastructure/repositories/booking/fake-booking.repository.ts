@@ -1,3 +1,4 @@
+import { v4 as uuidV4 } from "uuid";
 import { BookingEntity } from "../../../domain/entities/booking/booking.entity";
 import { PropertyEntity } from "../../../domain/entities/property/property.entity";
 import { UserEntity } from "../../../domain/entities/user/user.entity";
@@ -7,7 +8,7 @@ import { DateRange } from "../../../domain/value-objects/date-range/date-range";
 export class FakeBookingRepository implements BookingRepository {
   private bookings: BookingEntity[] = Array.from({ length: 5 }, (_, i) => {
     const property = new PropertyEntity(
-      `property-${i}`,
+      uuidV4(),
       `Property ${i}`,
       `Description ${i}`,
       100,
@@ -15,7 +16,7 @@ export class FakeBookingRepository implements BookingRepository {
       10,
     );
 
-    const user = new UserEntity(`user-${i}`, `User ${i}`);
+    const user = new UserEntity(uuidV4(), `User ${i}`);
 
     const dateRange = new DateRange(
       new Date(2026, 0, i + 1),
@@ -23,7 +24,7 @@ export class FakeBookingRepository implements BookingRepository {
     );
 
     const booking = new BookingEntity(
-      `booking-${i}`,
+      uuidV4(),
       property,
       user,
       dateRange,
@@ -33,7 +34,7 @@ export class FakeBookingRepository implements BookingRepository {
   });
 
   async findAll(): Promise<BookingEntity[]> {
-    return this.bookings;
+    return await this.bookings;
   }
 
   async findOne(bookingId: string): Promise<BookingEntity | null> {
@@ -42,13 +43,6 @@ export class FakeBookingRepository implements BookingRepository {
   }
 
   async save(booking: BookingEntity): Promise<void> {
-    const index = this.bookings.findIndex((b) => b["id"] === booking["id"]);
-
-    if (index !== -1) {
-      this.bookings[index] = booking;
-      return;
-    }
-
-    this.bookings.push(booking);
+    await this.bookings.push(booking);
   }
 }

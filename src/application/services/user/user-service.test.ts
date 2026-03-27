@@ -1,7 +1,7 @@
-import { UserService } from "../../../src/application/user/user.service";
-import { FakeUserRepository } from "../../../src/infrastructure/repositories/user/fake-user.repository";
-import { UserEntity } from "../../domain/entities/user/user.entity";
-import { context } from "../../lib/context";
+import { UserService } from "../../../../src/application/services/user/user.service";
+import { UserEntity } from "../../../../src/domain/entities/user/user.entity";
+import { FakeUserRepository } from "../../../../src/infrastructure/repositories/user/fake-user.repository";
+import { context } from "../../../../src/lib/context";
 
 describe("UserService", () => {
   let userService: UserService;

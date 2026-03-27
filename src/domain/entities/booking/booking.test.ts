@@ -1,5 +1,5 @@
+import { BookingStatus } from "../../../../src/domain/enums/booking-status.enum";
 import { context } from "../../../lib/context";
-import { Bookingstatus } from "../../enums/booking-status.enum";
 import { DateRange } from "../../value-objects/date-range/date-range";
 import { PropertyEntity } from "../property/property.entity";
 import { UserEntity } from "../user/user.entity";
@@ -74,7 +74,7 @@ describe("Booking entity", () => {
 
       booking.cancel(currentDate);
 
-      expect(booking.getStatus()).toBe(Bookingstatus.CANCELED);
+      expect(booking.getStatus()).toBe(BookingStatus.CANCELED);
       expect(booking.getTotalPrice()).toBe(600);
     });
 
@@ -99,7 +99,7 @@ describe("Booking entity", () => {
 
       booking.cancel(currentDate);
 
-      expect(booking.getStatus()).toBe(Bookingstatus.CANCELED);
+      expect(booking.getStatus()).toBe(BookingStatus.CANCELED);
       expect(booking.getTotalPrice()).toBe(0);
     });
 
@@ -124,7 +124,7 @@ describe("Booking entity", () => {
 
       booking.cancel(currentDate);
 
-      expect(booking.getStatus()).toBe(Bookingstatus.CANCELED);
+      expect(booking.getStatus()).toBe(BookingStatus.CANCELED);
       expect(booking.getTotalPrice()).toBe(300 * 5 * 0.5);
     });
   });
@@ -222,7 +222,7 @@ describe("Booking entity", () => {
 
       booking.cancel(currentDate);
 
-      expect(booking.getStatus()).toBe(Bookingstatus.CANCELED);
+      expect(booking.getStatus()).toBe(BookingStatus.CANCELED);
       expect(() => {
         booking.cancel(currentDate);
       }).toThrow("Booking already cancelled");

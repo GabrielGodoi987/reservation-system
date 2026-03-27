@@ -1,5 +1,7 @@
+import { v4 as uuidV4 } from 'uuid';
 import { BookingEntity } from "../../../domain/entities/booking/booking.entity";
 import { BookingRepository } from "../../../domain/repositories/booking.repository";
+import { DateRange } from "../../../domain/value-objects/date-range/date-range";
 import { PropertyService } from "../property/property.service";
 import { UserService } from "../user/user.service";
 import { CreateBookingDto } from "./dto/create-booking.dto";
@@ -16,7 +18,23 @@ export class BookingService {
   }
 
   async create(bookingDto: CreateBookingDto): Promise<BookingEntity> {
-    const createdBooking = await this.bookingRepository.save();
+    const { propertyId, guestId, startDate, endDate, guestCount } = bookingDto;
+    const property = await this.propertyService.findById(propertyId);
+    const guest = await this.userService.findById(guestId);
+
+    if (!property) throw new Error('Property not founf');
+    if(!guest) throw new Error('User not found')
+
+    const dateRange = new DateRange(startDate, endDate);
+    
+    const id = uuidV4();
+    console.log(id);
+    
+    const newBooking = new BookingEntity(id, property, guest, dateRange, guestCount); // need mock, because its very coupled
+
+    await this.bookingRepository.save(newBooking);
+
+    return newBooking;
   }
 
   async findOne(bookingId: string): Promise<BookingEntity | null> {
