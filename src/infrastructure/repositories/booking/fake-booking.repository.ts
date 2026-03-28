@@ -1,4 +1,4 @@
-import { v4 as uuidV4 } from "uuid";
+import { randomUUID } from "node:crypto";
 import { BookingEntity } from "../../../domain/entities/booking/booking.entity";
 import { PropertyEntity } from "../../../domain/entities/property/property.entity";
 import { UserEntity } from "../../../domain/entities/user/user.entity";
@@ -8,7 +8,7 @@ import { DateRange } from "../../../domain/value-objects/date-range/date-range";
 export class FakeBookingRepository implements BookingRepository {
   private bookings: BookingEntity[] = Array.from({ length: 5 }, (_, i) => {
     const property = new PropertyEntity(
-      uuidV4(),
+      randomUUID(),
       `Property ${i}`,
       `Description ${i}`,
       100,
@@ -16,7 +16,7 @@ export class FakeBookingRepository implements BookingRepository {
       10,
     );
 
-    const user = new UserEntity(uuidV4(), `User ${i}`);
+    const user = new UserEntity(randomUUID(), `User ${i}`);
 
     const dateRange = new DateRange(
       new Date(2026, 0, i + 1),
@@ -24,12 +24,13 @@ export class FakeBookingRepository implements BookingRepository {
     );
 
     const booking = new BookingEntity(
-      uuidV4(),
+      randomUUID(),
       property,
       user,
       dateRange,
       2,
     );
+
     return booking;
   });
 
