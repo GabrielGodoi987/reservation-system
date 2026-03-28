@@ -1,4 +1,4 @@
-import { v4 as uuidV4 } from 'uuid';
+import { randomUUID } from "node:crypto";
 import { BookingEntity } from "../../../domain/entities/booking/booking.entity";
 import { BookingRepository } from "../../../domain/repositories/booking.repository";
 import { DateRange } from "../../../domain/value-objects/date-range/date-range";
@@ -22,15 +22,20 @@ export class BookingService {
     const property = await this.propertyService.findById(propertyId);
     const guest = await this.userService.findById(guestId);
 
-    if (!property) throw new Error('Property not founf');
-    if(!guest) throw new Error('User not found')
+    if (!property) throw new Error("Property not founf");
+    if (!guest) throw new Error("User not found");
 
     const dateRange = new DateRange(startDate, endDate);
-    
-    const id = uuidV4();
-    console.log(id);
-    
-    const newBooking = new BookingEntity(id, property, guest, dateRange, guestCount); // need mock, because its very coupled
+
+    const id = randomUUID();
+
+    const newBooking = new BookingEntity(
+      id,
+      property,
+      guest,
+      dateRange,
+      guestCount,
+    ); // need mock, because its very coupled
 
     await this.bookingRepository.save(newBooking);
 
@@ -45,5 +50,11 @@ export class BookingService {
     }
 
     return booking;
+  }
+
+  async cancel(bookingId: string): Promise<void> {
+    const booking = await this.findOne(bookingId);
+    booking?.cancel(new Date());
+    await this.bookingRepository.save(booking!);
   }
 }

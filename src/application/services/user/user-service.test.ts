@@ -25,8 +25,6 @@ describe("UserService", () => {
 
       const user = await userService.findById(userEntity.getId());
 
-      console.log(userEntity);
-      console.log(user);
       expect(user).toBe(userEntity);
       expect(user).not.toBeNull();
       expect(user?.getId()).toBe(userEntity.getId());
