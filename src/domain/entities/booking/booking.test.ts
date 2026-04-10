@@ -1,9 +1,9 @@
-import { BookingStatus } from "../../../../src/domain/enums/booking-status.enum";
-import { context } from "../../../lib/context";
-import { DateRange } from "../../value-objects/date-range/date-range";
-import { PropertyEntity } from "../property/property.entity";
-import { UserEntity } from "../user/user.entity";
-import { BookingEntity } from "./booking.entity";
+import { BookingStatus } from "@/domain/enums/booking-status.enum";
+import { context } from "@/lib/context";
+import { DateRange } from "@/domain/value-objects/date-range/date-range";
+import { PropertyEntity } from "@/domain/entities/property/property.entity";
+import { UserEntity } from "@/domain/entities/user/user.entity";
+import { BookingEntity } from "@/domain/entities/booking/booking.entity";
 
 describe("Booking entity", () => {
   context("success", () => {

@@ -1,11 +1,11 @@
-import { context } from "../../../../src/lib/context";
-import { BookingEntity } from "../../../domain/entities/booking/booking.entity";
-import { BookingStatus } from "../../../domain/enums/booking-status.enum";
-import { FakeBookingRepository } from "../../../infrastructure/repositories/booking/fake-booking.repository";
-import { PropertyService } from "../../services/property/property.service";
-import { UserService } from "../../services/user/user.service";
-import { BookingService } from "../booking/booking.service";
-import { CreateBookingDto } from "../booking/dto/create-booking.dto";
+import { context } from "@/lib/context";
+import { BookingEntity } from "@/domain/entities/booking/booking.entity";
+import { BookingStatus } from "@/domain/enums/booking-status.enum";
+import { FakeBookingRepository } from "@/infrastructure/repositories/booking/fake-booking.repository";
+import { PropertyService } from "@/application/services/property/property.service";
+import { UserService } from "@/application/services/user/user.service";
+import { BookingService } from "@/application/services/booking/booking.service";
+import { CreateBookingDto } from "@/application/services/booking/dto/create-booking.dto";
 
 jest.mock("../property/property.service");
 jest.mock("../user/user.service");

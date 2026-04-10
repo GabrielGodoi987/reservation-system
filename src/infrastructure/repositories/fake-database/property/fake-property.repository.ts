@@ -1,5 +1,5 @@
-import { PropertyEntity } from "../../../domain/entities/property/property.entity";
-import { PropertyRepository } from "../../../domain/repositories/property.repository";
+import { PropertyEntity } from "../../../../domain/entities/property/property.entity";
+import { PropertyRepository } from "../../../../domain/repositories/property.repository";
 
 export class FakePropertyRepository implements PropertyRepository {
   private properties: PropertyEntity[] = Array.from(

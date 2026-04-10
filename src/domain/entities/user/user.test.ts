@@ -1,5 +1,5 @@
-import { context } from "../../../lib/context";
-import { UserEntity } from "./user.entity";
+import { context } from "@/lib/context";
+import { UserEntity } from "@/domain/entities/user/user.entity";
 
 describe("User Entity", () => {
   context("success", () => {});

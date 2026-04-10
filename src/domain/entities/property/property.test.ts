@@ -1,8 +1,8 @@
-import { context } from "../../../lib/context";
-import { DateRange } from "../../value-objects/date-range/date-range";
-import { BookingEntity } from "../booking/booking.entity";
-import { UserEntity } from "../user/user.entity";
-import { PropertyEntity } from "./property.entity";
+import { context } from "@/lib/context";
+import { DateRange } from "@/domain/value-objects/date-range/date-range";
+import { BookingEntity } from "@/domain/entities/booking/booking.entity";
+import { UserEntity } from "@/domain/entities/user/user.entity";
+import { PropertyEntity } from "@/domain/entities/property/property.entity";
 
 describe("Property Entity", () => {
   context("success", () => {
