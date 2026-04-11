@@ -1,7 +1,7 @@
 import { context } from "@/lib/context";
 import { BookingEntity } from "@/domain/entities/booking/booking.entity";
 import { BookingStatus } from "@/domain/enums/booking-status.enum";
-import { FakeBookingRepository } from "@/infrastructure/repositories/booking/fake-booking.repository";
+import { FakeBookingRepository } from "@/infrastructure/repositories/fake-database/booking/fake-booking.repository";
 import { PropertyService } from "@/application/services/property/property.service";
 import { UserService } from "@/application/services/user/user.service";
 import { BookingService } from "@/application/services/booking/booking.service";

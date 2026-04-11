@@ -1,6 +1,6 @@
 import { UserService } from "@/application/services/user/user.service";
 import { UserEntity } from "@/domain/entities/user/user.entity";
-import { FakeUserRepository } from "@/infrastructure/repositories/user/fake-user.repository";
+import { FakeUserRepository } from "@/infrastructure/repositories/fake-database/user/fake-user.repository";
 import { context } from "@/lib/context";
 
 describe("UserService", () => {

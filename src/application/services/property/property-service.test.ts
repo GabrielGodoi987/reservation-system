@@ -1,5 +1,5 @@
 import { PropertyEntity } from "@/domain/entities/property/property.entity";
-import { FakePropertyRepository } from "@/infrastructure/repositories/property/fake-property.repository";
+import { FakePropertyRepository } from "@/infrastructure/repositories/fake-database/property/fake-property.repository";
 import { context } from "@/lib/context";
 import { PropertyService } from "@/application/services/property/property.service";
 

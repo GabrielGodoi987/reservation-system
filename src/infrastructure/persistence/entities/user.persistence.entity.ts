@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, OneToMany } from "typeorm";
+import { BookingPersistenceEntity } from "./booking.persistence.entity";
 
 @Entity('users')
 export class UserPersistenceEntity {
@@ -7,4 +8,7 @@ export class UserPersistenceEntity {
 
   @Column()
   name!: string;
+
+  @OneToMany(() => BookingPersistenceEntity, (booking) => booking.user)
+  bookings!: BookingPersistenceEntity[];
 }
