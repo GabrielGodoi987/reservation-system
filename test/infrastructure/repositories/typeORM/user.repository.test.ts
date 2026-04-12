@@ -1,17 +1,17 @@
 import { Repository } from 'typeorm';
 import { UserEntity } from '../../../../src/domain/entities/user/user.entity';
-import { UserRepository } from '../../../../src/infrastructure/repositories/typeOrm/user/user.repository';
+import { UserRepositoryImpl } from '../../../../src/infrastructure/repositories/typeOrm/user/user.repository';
 import { AppDataSource } from '../../../../src/data-source';
 import { UserPersistenceEntity } from '../../../../src/infrastructure/persistence/entities/user.persistence.entity';
 
 describe('User repository unit test - TypeORM', () => {
-  let userRepository: UserRepository;
+  let userRepository: UserRepositoryImpl;
   let repository: Repository<UserPersistenceEntity>;
 
   beforeAll(async () => { 
     await AppDataSource.initialize();
     repository = AppDataSource.getRepository(UserPersistenceEntity);
-    userRepository = new UserRepository(repository);
+    userRepository = new UserRepositoryImpl(repository);
   });
 
   afterAll(async () => { 

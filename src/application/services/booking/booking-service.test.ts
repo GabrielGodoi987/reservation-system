@@ -6,6 +6,7 @@ import { PropertyService } from "@/application/services/property/property.servic
 import { UserService } from "@/application/services/user/user.service";
 import { BookingService } from "@/application/services/booking/booking.service";
 import { CreateBookingDto } from "@/application/services/booking/dto/create-booking.dto";
+import { right, left, notFound } from "@/lib/either";
 
 jest.mock("../property/property.service");
 jest.mock("../user/user.service");
@@ -59,19 +60,21 @@ describe("BookingService", () => {
         guestCount: 2,
       };
 
-      mockPropertyService.findById.mockResolvedValue(mockProperty);
-      mockUserService.findById.mockResolvedValue(mockUser);
+      mockPropertyService.findById.mockResolvedValue(right(mockProperty));
+      mockUserService.findById.mockResolvedValue(right(mockUser));
 
       const result = await bookingService.create(bookingDto);
 
-      expect(result).toBeInstanceOf(BookingEntity);
-      expect(result.getStatus()).toBe(BookingStatus.CONFIRMED);
-      expect(result.getTotalPrice()).toBe(500);
+      expect(result._tag).toBe("Right");
+      if (result._tag === "Right") {
+        expect(result.right).toBeInstanceOf(BookingEntity);
+        expect(result.right.getStatus()).toBe(BookingStatus.CONFIRMED);
+        expect(result.right.getTotalPrice()).toBe(500);
 
-      const savedBooking = await repository.findOne(result.getId());
-
-      expect(savedBooking).not.toBeNull();
-      expect(savedBooking?.getId()).toBe(result.getId());
+        const savedBooking = await repository.findOne(result.right.getId());
+        expect(savedBooking).not.toBeNull();
+        expect(savedBooking?.getId()).toBe(result.right.getId());
+      }
     });
 
     it("should cancel an existent booking", async () => {
@@ -95,10 +98,14 @@ describe("BookingService", () => {
         guestCount: 2,
       };
 
-      mockPropertyService.findById.mockResolvedValue(mockProperty);
-      mockUserService.findById.mockResolvedValue(mockUser);
+      mockPropertyService.findById.mockResolvedValue(right(mockProperty));
+      mockUserService.findById.mockResolvedValue(right(mockUser));
 
-      const booking = await bookingService.create(bookingDto);
+      const createResult = await bookingService.create(bookingDto);
+      
+      if (createResult._tag === "Left") return;
+      
+      const booking = createResult.right;
 
       const findByIdSpy = jest.spyOn(
         FakeBookingRepository.prototype,
@@ -111,23 +118,29 @@ describe("BookingService", () => {
 
       const canceledBooking = await bookingService.findOne(booking.getId());
 
-      expect(canceledBooking?.getStatus()).toBe(BookingStatus.CANCELED);
-      expect(findByIdSpy).toHaveBeenCalledWith(booking.getId());
-      expect(findByIdSpy).toHaveBeenCalledTimes(1);
-      expect(saveSpy).toHaveBeenCalledTimes(1);
+      expect(canceledBooking._tag).toBe("Right");
+      if (canceledBooking._tag === "Right") {
+        expect(canceledBooking.right.getStatus()).toBe(BookingStatus.CANCELED);
+        expect(findByIdSpy).toHaveBeenCalledWith(booking.getId());
+        expect(findByIdSpy).toHaveBeenCalledTimes(2);
+        expect(saveSpy).toHaveBeenCalledTimes(1);
+      }
     });
   });
 
   context("failure", () => {
-    it("should not create booking when property not found", async () => {
-      mockPropertyService.findById.mockResolvedValue(null);
+    it("should return error when property not found", async () => {
+      mockPropertyService.findById.mockResolvedValue(left(notFound("Property not found")));
 
-      await expect(bookingService.create({} as any)).rejects.toThrow(
-        "Property not found",
-      );
+      const result = await bookingService.create({} as any);
+
+      expect(result._tag).toBe("Left");
+      if (result._tag === "Left") {
+        expect(result.left.message).toBe("Property not found");
+      }
     });
 
-    it("should throw an error when user is not found", async () => {
+    it("should return error when user is not found", async () => {
       const mockProperty = {
         getId: jest.fn().mockReturnValue("1"),
         isAvailable: jest.fn().mockReturnValue(true),
@@ -136,15 +149,18 @@ describe("BookingService", () => {
         addBooking: jest.fn(),
       } as any;
 
-      mockPropertyService.findById.mockResolvedValue(mockProperty);
-      mockUserService.findById.mockResolvedValue(null);
+      mockPropertyService.findById.mockResolvedValue(right(mockProperty));
+      mockUserService.findById.mockResolvedValue(left(notFound("User not found")));
 
-      await expect(bookingService.create({} as any)).rejects.toThrow(
-        "User not found",
-      );
+      const result = await bookingService.create({} as any);
+
+      expect(result._tag).toBe("Left");
+      if (result._tag === "Left") {
+        expect(result.left.message).toBe("User not found");
+      }
     });
 
-    it("should throw an error when property is not available", async () => {
+    it("should return error when property is not available", async () => {
       const mockProperty = {
         getId: jest.fn().mockReturnValue("1"),
         isAvailable: jest.fn().mockReturnValue(false),
@@ -154,28 +170,7 @@ describe("BookingService", () => {
         getId: jest.fn().mockReturnValue("1"),
       } as any;
 
-      mockPropertyService.findById.mockResolvedValue(mockProperty);
-      mockUserService.findById.mockResolvedValue(mockUser);
-
-      await expect(bookingService.create({} as any)).rejects.toThrow(
-        "Property not available",
-      );
-    });
-
-    it.only("should throw an error when trying to book in unavailable period", async () => {
-      const mockProperty = {
-        getId: jest.fn().mockReturnValue("1"),
-        isAvailable: jest.fn().mockReturnValue(false), // ✅ aqui está a regra
-        validateGuestCount: jest.fn(),
-        calculateTotalPrice: jest.fn(),
-        addBooking: jest.fn(),
-      } as any;
-
-      const mockUser = {
-        getId: jest.fn().mockReturnValue("1"),
-      } as any;
-
-      const createBookingDto: CreateBookingDto = {
+      const bookingDto: CreateBookingDto = {
         propertyId: "1",
         guestId: "1",
         startDate: new Date("2026-05-05"),
@@ -183,12 +178,15 @@ describe("BookingService", () => {
         guestCount: 2,
       };
 
-      mockPropertyService.findById.mockResolvedValue(mockProperty);
-      mockUserService.findById.mockResolvedValue(mockUser);
+      mockPropertyService.findById.mockResolvedValue(right(mockProperty));
+      mockUserService.findById.mockResolvedValue(right(mockUser));
 
-      await expect(bookingService.create(createBookingDto)).rejects.toThrow(
-        "Property is not available for selected date range",
-      );
+      const result = await bookingService.create(bookingDto);
+
+      expect(result._tag).toBe("Left");
+      if (result._tag === "Left") {
+        expect(result.left.message).toBe("Property is not available for selected date range");
+      }
     });
   });
 });

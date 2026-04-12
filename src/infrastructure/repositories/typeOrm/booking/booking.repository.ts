@@ -1,5 +1,5 @@
 import { BookingEntity } from "@/domain/entities/booking/booking.entity";
-import { BookingRepository } from "@/domain/repositories/booking.repository";
+import { IBookingRepository } from "@/domain/repositories/booking.repository";
 import { BookingPersistenceEntity } from "@/infrastructure/persistence/entities/booking.persistence.entity";
 import { PropertyPersistenceEntity } from "@/infrastructure/persistence/entities/property.persistence.entity";
 import { UserPersistenceEntity } from "@/infrastructure/persistence/entities/user.persistence.entity";
@@ -8,7 +8,7 @@ import { PropertyMapper } from "@/infrastructure/mappers/property.mapper";
 import { UserEntity } from "@/domain/entities/user/user.entity";
 import { Repository, FindOptionsWhere } from "typeorm";
 
-export class BookingRepositoryImpl implements BookingRepository {
+export class BookingRepositoryImpl implements IBookingRepository {
   constructor(
     private readonly bookingDataSource: Repository<BookingPersistenceEntity>,
     private readonly propertyDataSource: Repository<PropertyPersistenceEntity>,

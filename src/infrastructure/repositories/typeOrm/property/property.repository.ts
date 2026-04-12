@@ -1,10 +1,10 @@
 import { PropertyEntity } from "@/domain/entities/property/property.entity";
-import { PropertyRepository } from "@/domain/repositories/property.repository";
+import { IPropertyRepository } from "@/domain/repositories/property.repository";
 import { PropertyMapper } from "@/infrastructure/mappers/property.mapper";
 import { PropertyPersistenceEntity } from "@/infrastructure/persistence/entities/property.persistence.entity";
 import { FindOptionsWhere, Repository } from "typeorm";
 
-export class PropertyRepositoryImpl implements PropertyRepository {
+export class PropertyRepositoryImpl implements IPropertyRepository {
   constructor(private readonly propertyDataSource: Repository<PropertyPersistenceEntity>) {}
 
   async findAll(): Promise<PropertyEntity[]> {

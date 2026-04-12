@@ -1,16 +1,16 @@
 import { UserEntity } from "@/domain/entities/user/user.entity";
+import { IUserRepository } from "@/domain/repositories/user.repository";
 import { FindOptionsWhere, Repository } from "typeorm";
 import { UserPersistenceEntity } from "@/infrastructure/persistence/entities/user.persistence.entity";
 
-export class UserRepository {
+export class UserRepositoryImpl implements IUserRepository {
   constructor(private readonly userDataSource: Repository<UserPersistenceEntity>) { }
 
-  async save(userEntity: UserEntity): Promise<UserEntity> {
+  async save(userEntity: UserEntity): Promise<void> {
     const persistenceEntity = new UserPersistenceEntity();
     persistenceEntity.id = userEntity.getId();
     persistenceEntity.name = userEntity.getName();
-    const saved = await this.userDataSource.save(persistenceEntity);
-    return new UserEntity(saved.id, saved.name);
+    await this.userDataSource.save(persistenceEntity);
   }
 
   async findById(id: string): Promise<UserEntity | null> {

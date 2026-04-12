@@ -2,10 +2,10 @@ import { randomUUID } from "node:crypto";
 import { BookingEntity } from "@/domain/entities/booking/booking.entity";
 import { PropertyEntity } from "@/domain/entities/property/property.entity";
 import { UserEntity } from "@/domain/entities/user/user.entity";
-import { BookingRepository } from "@/domain/repositories/booking.repository";
+import { IBookingRepository } from "@/domain/repositories/booking.repository";
 import { DateRange } from "@/domain/value-objects/date-range/date-range";
 
-export class FakeBookingRepository implements BookingRepository {
+export class FakeBookingRepository implements IBookingRepository {
   private bookings: BookingEntity[] = Array.from({ length: 5 }, (_, i) => {
     const property = new PropertyEntity(
       randomUUID(),

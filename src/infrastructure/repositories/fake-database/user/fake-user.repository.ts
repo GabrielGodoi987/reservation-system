@@ -1,7 +1,7 @@
 import { UserEntity } from "@/domain/entities/user/user.entity";
-import { UserRepository } from "@/domain/repositories/user.repository";
+import { IUserRepository } from "@/domain/repositories/user.repository";
 
-export class FakeUserRepository implements UserRepository {
+export class FakeUserRepository implements IUserRepository {
   private users: UserEntity[] = Array.from({ length: 10 }, (_, i: number) => {
     return new UserEntity(`${i}`, `User ${i}`);
   });
